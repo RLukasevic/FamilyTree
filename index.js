@@ -1,9 +1,27 @@
-/**
- * @format
- */
-
-import {AppRegistry} from 'react-native';
+import { Navigation } from 'react-native-navigation';
 import App from './App';
-import {name as appName} from './app.json';
+import Settings from './src/Containers/SettingsContainer';
 
-AppRegistry.registerComponent(appName, () => App);
+
+Navigation.registerComponent('app', () => App);
+Navigation.registerComponent('Settings', () => Settings);
+Navigation.events().registerAppLaunchedListener(() => {
+    Navigation.setRoot({
+        root: {
+            stack: {
+                children: [{
+                    component: {
+                        name: 'app',
+                        options: {
+                            topBar: {
+                                title: {
+                                    text: 'Home'
+                                }
+                            }
+                        }
+                    }
+                }]
+            }
+        }
+    })
+});

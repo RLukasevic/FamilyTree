@@ -10,8 +10,12 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "@rematch/core": "^2.0.1",
+    "@types/react-redux": "^7.1.16",
     "react": "16.13.1",
-    "react-native": "0.63.4"
+    "react-native": "0.63.4",
+    "react-native-navigation": "^7.11.2",
+    "react-redux": "^7.2.2"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",

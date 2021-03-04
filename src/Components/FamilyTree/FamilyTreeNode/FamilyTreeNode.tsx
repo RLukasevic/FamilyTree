@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity } from 'react-native';
 import { TreeDataType } from '../../../Types/types';
 import FamilyTree from '../FamilyTree';
 
-const FamilyTreeNode = (props:Props) => {
+const FamilyTreeNode  = (props:Props) => {
 
     const [childVisible,setChildVisible] = useState(false);
 
@@ -20,13 +20,18 @@ const FamilyTreeNode = (props:Props) => {
                 </Text>
             </TouchableOpacity>
 
-            {props.data.children && childVisible ? <FamilyTree data={props.data.children} /> : null}
+            <TouchableOpacity onPress={() => props.openSettings(props.data.key)} >
+                <Text>Settings</Text>
+            </TouchableOpacity>
+
+            {props.data.children && childVisible ? <FamilyTree openSettings={props.openSettings} data={props.data.children} /> : null}
         </>
     )
 }
 
 interface Props {
-    data: TreeDataType
+    data: TreeDataType,
+    openSettings: (arg:string) => {}
 }
 
 export default FamilyTreeNode;

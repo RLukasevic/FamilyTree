@@ -6,13 +6,14 @@ import { TreeDataType } from '../../Types/types';
 const FamilyTree = (props:Props) => {
     return (
         <View>
-            <FlatList data={props.data} renderItem={({item}) => <FamilyTreeNode data={item} />} />
+            <FlatList data={props.data} renderItem={({item}) => <FamilyTreeNode openSettings={props.openSettings} data={item} />} />
         </View>
     );
 }
 
 interface Props {
     data: Array<TreeDataType>
+    openSettings: (key:string) => {}
 }
 
 export default FamilyTree;

@@ -1,42 +1,56 @@
 import React, { Component } from 'react';
-import {TreeDataType} from '../Types/types'
 import FamilyTree from '../Components/FamilyTree/FamilyTree'
+import { RootState, Dispatch } from '../store/store'
+import { connect } from 'react-redux'
+import { Navigation } from 'react-native-navigation';
 
-class FamilyTreeContainer extends Component {
+
+class FamilyTreeContainer extends Component<Props> {
+
+    componentDidMount = async () => {
+        await this.props.initData()
+    }
+
+    openSettings = async (key:string) => {
+        console.log(this.props.componentId)
+        await Navigation.push(this.props.componentId, {
+            component: {
+              name: 'Settings',
+              options: {
+                topBar: {
+                    title: {
+                        text: 'Settings of key: ' + key + ' node',
+                    }
+                }
+            }
+            }
+        }).catch(e => console.log(e))
+    }
 
     render() {
 
-        let data:Array<TreeDataType> = [{
-            key:'0_0',
-            label:'First Node',
-            children:[{
-                key:'0_1',
-                label:'First Nodes First Child'
-            },
-            {
-                key:'0_2',
-                label:'First Nodes Second Child'
-            }],
-        },
-        {
-            key:'1_0',
-            label:'Second Node'
-        },
-        {
-            key:'2_0',
-            label:'Third Node',
-            children:[{
-                key:'2_1',
-                label:'Third Nodes First Child'
-            }]
-        }]
+        const familyTree  = this.props.familyTreeState.data
 
         return (
             <>
-                <FamilyTree data={data} />
+                <FamilyTree openSettings={(key:string) => this.openSettings(key)} data={familyTree} />
             </>
         );
     }
 }
 
-export default FamilyTreeContainer;
+const mapStateToProps = (state: RootState) => ({
+    familyTreeState: state.familyTreeData,
+})
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+    initData: dispatch.familyTreeData.initDataAsync,
+})
+
+type StateProps = ReturnType<typeof mapStateToProps>
+type DispatchProps = ReturnType<typeof mapDispatchToProps>
+type Props = StateProps & DispatchProps & {
+    componentId:string
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(FamilyTreeContainer);

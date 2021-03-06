@@ -13,7 +13,7 @@ const FamilyTree = (props:Props) => {
 
 interface Props {
     data: Array<TreeDataType>
-    openSettings: (key:string) => {}
+    openSettings: (el:TreeDataType) => {}
 }
 
 export default FamilyTree;

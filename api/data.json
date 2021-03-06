@@ -1,32 +1,38 @@
 [{
-    "key":"0_0",
-    "label":"First Node",
+    "key":"0",
+    "name":"Tom",
+    "lastName":"Hopkins",
+    "bDate":"1st of April 1999",
+    "path":["0"],
     "children":[{
-        "key":"0_1",
-        "label":"First Nodes First Child",
+        "key":"0_0",
+        "path":["0","0_0"],
+        "name":"Darude",
+        "lastName":"Sandstorm",
+        "bDate":"1st of April 1999",
         "children":[{
-            "key":"0_1_1",
-            "label":"First Nodes First Childs First Child"
+            "key":"0_0_0",
+            "path":["0","0_0","0_0_0"],
+            "name":"Sun",
+            "lastName":"Boy",
+            "bDate":"1st of April 1999",
+            "children":[]
         },
         {
-            "key":"0_1_2",
-            "label":"First Nodes First Childs Second Child"
+            "key":"0_0_1",
+            "path":["0","0_0","0_0_1"],
+            "name":"Tonny",
+            "lastName":"Blaire",
+            "bDate":"1st of April 1999",
+            "children":[]
         }]
     },
     {
-        "key":"0_2",
-        "label":"First Nodes Second Child"
-    }]
-},
-{
-    "key":"1_0",
-    "label":"Second Node"
-},
-{
-    "key":"2_0",
-    "label":"Third Node",
-    "children":[{
-        "key":"2_1",
-        "label":"Third Nodes First Child"
+        "key":"0_1",
+        "path":["0","0_1"],
+        "name":"Ocean",
+        "lastName":"Man",
+        "bDate":"1st of April 1999",
+        "children":[]
     }]
 }]

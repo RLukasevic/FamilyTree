@@ -1,39 +1,50 @@
-import React, { Component } from 'react';
+import React from 'react';
 import FamilyTree from '../Components/FamilyTree/FamilyTree'
 import { RootState, Dispatch } from '../store/store'
 import { connect } from 'react-redux'
 import { Navigation } from 'react-native-navigation';
+import { TreeDataType } from '../Types/types';
+import { NavigationComponent, NavigationComponentProps } from 'react-native-navigation';
 
 
-class FamilyTreeContainer extends Component<Props> {
+class FamilyTreeContainer extends NavigationComponent<Props> {
+
+    constructor(props: Props) {
+        super(props);
+    }
 
     componentDidMount = async () => {
         await this.props.initData()
     }
 
-    openSettings = async (key:string) => {
+    openSettings = async (element:TreeDataType) => {
         console.log(this.props.componentId)
         await Navigation.push(this.props.componentId, {
             component: {
-              name: 'Settings',
-              options: {
-                topBar: {
-                    title: {
-                        text: 'Settings of key: ' + key + ' node',
+                name: 'Settings',
+                options: {
+                    topBar: {
+                        title: {
+                            text: 'Settings',
+                        }
                     }
-                }
-            }
+                },
+                passProps: {
+                    key: element.key,
+                    element: element
+                  }
             }
         }).catch(e => console.log(e))
     }
 
     render() {
 
+        console.log(this.props)
         const familyTree  = this.props.familyTreeState.data
 
         return (
             <>
-                <FamilyTree openSettings={(key:string) => this.openSettings(key)} data={familyTree} />
+                <FamilyTree openSettings={this.openSettings} data={familyTree} />
             </>
         );
     }
@@ -49,8 +60,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 
 type StateProps = ReturnType<typeof mapStateToProps>
 type DispatchProps = ReturnType<typeof mapDispatchToProps>
-type Props = StateProps & DispatchProps & {
-    componentId:string
-}
+interface compProps extends NavigationComponentProps {}
+type Props = StateProps & DispatchProps & compProps
 
 export default connect(mapStateToProps,mapDispatchToProps)(FamilyTreeContainer);

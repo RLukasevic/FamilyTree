@@ -10,17 +10,17 @@ const FamilyTreeNode  = (props:Props) => {
     return (
         <>
             <TouchableOpacity onPress={() => setChildVisible(v => !v)}>
-                {props.data.children && (
+                {props.data.children.length > 0 && (
                     <Text>
                         {childVisible ? '-' : '+'}
                     </Text>
                 )}
                 <Text>
-                    {props.data.label}
+                    {props.data.name}
                 </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => props.openSettings(props.data.key)} >
+            <TouchableOpacity onPress={() => props.openSettings(props.data)} >
                 <Text>Settings</Text>
             </TouchableOpacity>
 
@@ -31,7 +31,7 @@ const FamilyTreeNode  = (props:Props) => {
 
 interface Props {
     data: TreeDataType,
-    openSettings: (arg:string) => {}
+    openSettings: (el:TreeDataType) => {}
 }
 
 export default FamilyTreeNode;

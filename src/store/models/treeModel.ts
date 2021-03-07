@@ -23,19 +23,12 @@ export const familyTreeData = createModel<RootModel>()({
         addChild(state:familyTreeDataStateType,element:TreeDataType,data:ModalDataType) {
             let newStateData:TreeDataType[] = state.data
             let newChildsKey:string;
-            let biggestChildsKey:string = '0';
+            let biggestChildsKey:string;
 
             if (element.children.length > 0) {
-
                 // avoiding dupes
-                for ( let i in element.children ) {
-                    if ( Number(element.children[i].key[element.children[i].key.length-1]) > Number(biggestChildsKey[biggestChildsKey.length-1])) {
-                        biggestChildsKey = element.children[i].key
-                    }
-                }
-
-                let lastIndex:string | undefined = biggestChildsKey[biggestChildsKey.length-1]
-                newChildsKey = biggestChildsKey.slice(0, -1) + String(Number(lastIndex) + 1)
+                biggestChildsKey = element.children[0].key
+                newChildsKey = IncrementBiggestChildKey(element, biggestChildsKey)
             } else {
                 newChildsKey = element.key + '_0'
             }
@@ -52,8 +45,6 @@ export const familyTreeData = createModel<RootModel>()({
             }
 
             pushChild(element.key, newChild, newStateData)
-
-            console.log('newstate? = ', newStateData)
 
             return {...state, data: newStateData};
         },
@@ -74,7 +65,6 @@ export const familyTreeData = createModel<RootModel>()({
     },
     effects: (dispatch) => ({
         async initDataAsync() {
-            console.log('eeeeeeeeeeeeeeeeeeeeeeshkere')
             let payload:TreeDataType[]
             payload = await fetch('http://192.168.0.104:5555/api/init').then(res => res.json()).then(res => {
                 return res
@@ -124,4 +114,24 @@ const editSelf = (editedChild:TreeDataType, tree:TreeDataType[]) => {
             }
         }
     }
+}
+
+const IncrementBiggestChildKey = (element:TreeDataType, biggestChildsKey:string) : string => {
+    let childsKeyArr:string[]
+    let childsKeyId:string
+    let biggestChildsKeyArr:string[] = biggestChildsKey.split('_')
+    let biggestChildsKeyId:string
+
+    for ( let i in element.children ) {
+        childsKeyArr = element.children[i].key.split('_')
+        childsKeyId = childsKeyArr[childsKeyArr.length - 1]
+        biggestChildsKeyId = biggestChildsKeyArr[biggestChildsKeyArr.length - 1]
+
+        if ( Number(childsKeyId) >= Number(biggestChildsKeyId)) {
+            biggestChildsKeyArr.pop()
+            biggestChildsKeyArr.push(String(Number(childsKeyId) + 1))
+        }
+    }
+
+    return biggestChildsKeyArr.join('_')
 }

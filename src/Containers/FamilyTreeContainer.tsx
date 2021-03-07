@@ -18,7 +18,6 @@ class FamilyTreeContainer extends NavigationComponent<Props> {
     }
 
     openSettings = async (element:TreeDataType) => {
-        console.log(this.props.componentId)
         await Navigation.push(this.props.componentId, {
             component: {
                 name: 'Settings',
@@ -38,8 +37,6 @@ class FamilyTreeContainer extends NavigationComponent<Props> {
     }
 
     render() {
-
-        console.log(this.props)
         const familyTree  = this.props.familyTreeState.data
 
         return (

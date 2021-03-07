@@ -1,6 +1,6 @@
 import React from 'react';
 import { RootState, Dispatch } from '../store/store'
-import { View } from 'react-native'
+import { View, ScrollView } from 'react-native'
 import { connect } from 'react-redux'
 import { Navigation } from 'react-native-navigation';
 import { NavigationComponent, NavigationComponentProps } from 'react-native-navigation';
@@ -25,10 +25,6 @@ class SettingsContainer extends NavigationComponent<Props> {
             bDate: '',
         },
     } as SettingsContainerStateType 
-
-    componentDidMount = () => {
-        console.log(this.props)
-    }
 
     inputOnChangeHandler = (text:string,mode:string) => {
         this.setState({
@@ -94,7 +90,7 @@ class SettingsContainer extends NavigationComponent<Props> {
     render() {
 
         return (
-            <>
+            <ScrollView>
                 <ModalComp 
                     modalShow={this.state.showEditModal}
                     modalHandler={() => this.modalHandler('edit')}
@@ -109,18 +105,38 @@ class SettingsContainer extends NavigationComponent<Props> {
                     modalDataChangeHandler={(text:string,mode:string) => this.inputOnChangeHandler(text,mode)}
                     data={this.state.modalData}
                 />
+
+                <ViewCont>
+                    <Card>
+                        <NodeParamRow>Name : {this.props.element.name}</NodeParamRow>
+                        <NodeParamRow>Last name : {this.props.element.lastName}</NodeParamRow>
+                        <NodeParamRow>Birth date : {this.props.element.bDate}</NodeParamRow>
+                    </Card>
+                    <ButtonsCont>
+                        <MainCardButton onPress={() => this.modalHandler('edit')} ><ButtonText>Change this node</ButtonText></MainCardButton>
+                        <MainCardButton onPress={() => this.modalHandler()} ><ButtonText>Add Relative</ButtonText></MainCardButton>
+                    </ButtonsCont>
+                </ViewCont>
+
                 <View>
-                    <Text>{this.props.element.name} {this.props.element.lastName}`s Children: </Text>
+                    <Text>{this.props.element.name} {this.props.element.lastName}`s Ancestors </Text>
                 </View>
 
                 {this.props.element.children.length > 0 ? this.props.element.children.map(e => {
-                    return <View key={e.key}><Text>{e.name}</Text><Button onPress={() => this.props.deleteChild(e)}><Text>Delete this child</Text></Button></View>
+                    return (
+                        <AncestorContainer key={e.key}>
+                            <AncestorDataContainer>
+                                <AncesstorParamRow>Name : {e.name}</AncesstorParamRow>
+                                <AncesstorParamRow>Last name : {e.lastName}</AncesstorParamRow>
+                                <AncesstorParamRow>Birth date : {e.bDate}</AncesstorParamRow>
+                            </AncestorDataContainer>
+                            <Button onPress={() => this.props.deleteChild(e)}>
+                                <AncestorDeleteButtonText>X</AncestorDeleteButtonText>
+                            </Button>
+                        </AncestorContainer>
+                    )
                 }) : <Text>None</Text>}
-
-                <Button onPress={() => this.modalHandler()} ><Text>Add child to this node</Text></Button>
-                <Button onPress={() => this.modalHandler('edit')} ><Text>Change this node`s data</Text></Button>
-                {/* <Button onPress={() => this.props.deleteNode(this.props.element)} ><Text>Delete this node</Text></Button> */}
-            </>
+            </ScrollView>
         );
     }
 }
@@ -143,14 +159,93 @@ interface compProps extends NavigationComponentProps {
 }
 type Props = StateProps & DispatchProps & compProps
 
-const Button = styled.TouchableOpacity`
-    background: black;
+const ViewCont = styled.View`
+    flex-direction: row;
+`;
+
+const Card = styled.View`
+    flex: 2;
+    text-align: center;
+    border: 2px solid black;
+    border-radius: 25px;
+    font-size: 14px;
+    height: 150px;
+    max-width: 60%;
+    margin: 20px 10px 20px 20px;
+    background: rgb(61, 163, 54);
+    box-shadow: 0px 3px 3px rgba(0,0,0,0.5);
+`;
+
+const ButtonsCont = styled.View`
+    flex: 1;
+`;
+
+const NodeParamRow = styled.Text`
+    flex: 1;
+    font-weight: 600;
+    padding: 10px;
+    color: #fff;
+`;
+
+const MainCardButton = styled.TouchableOpacity`
+    flex: 1;
+    flex-direction: column;
     width: 100px;
-    color: red;
-`
+    margin: 20px 0px 20px 0px;
+    background: rgb(61, 163, 54);
+    border: 2px solid black;
+    border-radius: 10px;
+`;
+
+const ButtonText = styled.Text`
+    font-size: 16px;
+    color: #fff;
+    font-weight: 500;
+    padding: 5px;
+`;
+
 const Text = styled.Text`
     font-size: 18px;
-    color: blue;
+    text-align: center;
+    color: #0f0f0f;
+    font-weight: 500;
+`;
+
+const AncestorContainer = styled.View`
+    flex-direction: row;
+    border: 2px solid black;
+    border-radius: 25px;
+    font-size: 14px;
+    height: 100px;
+    margin: 20px 10px 20px 20px;
+    background: rgb(81, 173, 158);
+    box-shadow: 0px 3px 3px rgba(0,0,0,0.5);
+`;
+
+const AncestorDataContainer = styled.View`
+    flex: 4;
+`;
+
+const AncesstorParamRow = styled.Text`
+    flex: 1;
+    font-weight: 600;
+    padding: 10px;
+    padding-top: 4px;
+    color: #fff;
+`;
+
+const Button = styled.TouchableOpacity`
+    background: rgb(209, 27, 27);
+    border-top-right-radius: 23px;
+    border-bottom-right-radius: 23px;
+    flex: 1;
+`;
+
+const AncestorDeleteButtonText = styled.Text`
+    font-size: 18px;
+    text-align: center;
+    padding-top: 35px;
+    color: #0f0f0f;
     font-weight: 500;
 `;
 

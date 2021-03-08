@@ -203,7 +203,6 @@ const Card = styled.View`
     max-width: 60%;
     margin: 20px 10px 20px 20px;
     background: rgb(61, 163, 54);
-    box-shadow: 0px 3px 3px rgba(0,0,0,0.5);
 `;
 
 const ButtonsCont = styled.View`
@@ -249,7 +248,6 @@ const AncestorContainer = styled.View`
     height: 100px;
     margin: 20px 10px 20px 20px;
     background: rgb(81, 173, 158);
-    box-shadow: 0px 3px 3px rgba(0,0,0,0.5);
 `;
 
 const AncestorDataContainer = styled.TouchableOpacity`

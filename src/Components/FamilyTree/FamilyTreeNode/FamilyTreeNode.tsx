@@ -50,7 +50,6 @@ const Card = styled.View<CardProps>`
     margin: 5px 10px 5px 10px;
     margin-left: ${props => props.level};
     background: rgb(61, 163, 54);
-    box-shadow: 0px 3px 3px rgba(0,0,0,0.5);
 `;
 
 const MainBodyContainer = styled.TouchableOpacity`

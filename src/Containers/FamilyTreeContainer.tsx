@@ -29,6 +29,17 @@ class FamilyTreeContainer extends NavigationComponent<Props> {
                         title: {
                             text: 'Settings',
                         }
+                    },
+                    animations: {
+                        push: {
+                            content: {
+                                translationX: {
+                                    from: require('react-native').Dimensions.get('window').width,
+                                    to: 0,
+                                    duration: 300
+                                }
+                            }
+                        }
                     }
                 },
                 passProps: {

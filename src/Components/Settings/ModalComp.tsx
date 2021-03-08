@@ -1,12 +1,21 @@
 import React from 'react';
 import { Modal, TouchableHighlight } from 'react-native';
 import styled from 'styled-components/native';
+import { ModalDataType } from '../../Types/types';
 
-const ModalComp = (props:any) => {
+type Props = {
+    modalShow:boolean
+    modalHandler: () => void
+    modalSubmitHandler: () => void
+    modalDataChangeHandler: (text:string,mode:string) => void
+    data: ModalDataType
+}
+
+const ModalComp = (props:Props) => {
 
     const submitWrap = () => {
         props.modalSubmitHandler()
-        props.modalHandler(!props.modalShow)
+        props.modalHandler()
     }
 
     return (
@@ -18,9 +27,8 @@ const ModalComp = (props:any) => {
                 props.modalHandler();
             }}
         >
-            <BackDrop onPress={() => props.modalHandler(!props.modalShow)} />
+            <BackDrop onPress={() => props.modalHandler()} />
             <ViewModal>
-                {props.inputError !== '' ? <ErrorText>{props.inputError}</ErrorText> : null}
                 <LabelText>Enter name:</LabelText>
                 <Input 
                     onChangeText={text => props.modalDataChangeHandler(text,'name')}
@@ -91,11 +99,6 @@ const Input = styled.TextInput`
     margin: 10px;
     margin-top: 2px;
     padding: 10px;
-`;
-
-const ErrorText = styled.Text`
-    color: red;
-    text-align: center;
 `;
 
 export default ModalComp;

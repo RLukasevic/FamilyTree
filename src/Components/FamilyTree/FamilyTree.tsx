@@ -6,7 +6,7 @@ import { TreeDataType } from '../../Types/types';
 const FamilyTree = (props:Props) => {
     return (
         <View>
-            <FlatList data={props.data} renderItem={({item}) => <FamilyTreeNode openSettings={props.openSettings} data={item} />} />
+            <FlatList data={props.data} renderItem={({item}) => <FamilyTreeNode openSettings={props.openSettings} data={item} level={item.path.length - 1} />} />
         </View>
     );
 }

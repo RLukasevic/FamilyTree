@@ -1,19 +1,27 @@
 import { createModel } from '@rematch/core'
-import { Alert } from 'react-native';
 import type { RootModel } from '.'
 import { TreeDataType, ModalDataType } from '../../Types/types'
 
 export type familyTreeDataStateType = {
     data: TreeDataType[],
+    error: null | string,
 }
 
 export const familyTreeData = createModel<RootModel>()({
     state: {
         data: [],
+        error: null,
     } as familyTreeDataStateType , // initial state
     reducers: {
-        initData(state:familyTreeDataStateType, payload: TreeDataType[]) {
-            return {...state, data: payload}
+        initData(state:familyTreeDataStateType, payload?: TreeDataType[]) {
+            if (payload) {
+                return {...state, data: payload}
+            } else {
+                return {...state , error: null, data: [{key:'0', path:['0'], name:'Change in settings', lastName:'', bDate:'', children:[]}]}
+            }
+        },
+        initError(state:familyTreeDataStateType) {
+            return {...state, error: 'Error occured, try later or initiate new tree'}
         },
         deleteChild(state:familyTreeDataStateType,element:TreeDataType) {
             let newStateData:TreeDataType[] = state.data
@@ -46,7 +54,7 @@ export const familyTreeData = createModel<RootModel>()({
 
             pushChild(element.key, newChild, newStateData)
 
-            return {...state, data: newStateData};
+            return {...state, data: newStateData, error: null};
         },
         editNode(state:familyTreeDataStateType,element:TreeDataType,data:ModalDataType) {
             let newStateData:TreeDataType[] = state.data
@@ -65,13 +73,11 @@ export const familyTreeData = createModel<RootModel>()({
     },
     effects: (dispatch) => ({
         async initDataAsync() {
-            let payload:TreeDataType[]
-            payload = await fetch('http://192.168.0.104:5555/api/init').then(res => res.json()).then(res => {
-                return res
+            await fetch('http://192.168.0.104:5555/api/init').then(res => res.json()).then(res => {
+                dispatch.familyTreeData.initData(res)
             }).catch(e => {
-                Alert.alert(e)
+                dispatch.familyTreeData.initError()
             })
-            dispatch.familyTreeData.initData(payload)
         },
     }),
 });

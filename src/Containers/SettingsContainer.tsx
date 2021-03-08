@@ -6,7 +6,7 @@ import { Navigation } from 'react-native-navigation';
 import { NavigationComponent, NavigationComponentProps } from 'react-native-navigation';
 import { TreeDataType, ModalDataType } from '../Types/types';
 import ModalComp from '../Components/Settings/ModalComp';
-import styled from 'styled-components/native'
+import styled from 'styled-components/native';
 
 type SettingsContainerStateType = {
     showEditModal:boolean,
@@ -87,6 +87,25 @@ class SettingsContainer extends NavigationComponent<Props> {
         }
     }
 
+    forwardToAncestor = async (element:TreeDataType) => {
+        await Navigation.push(this.props.componentId, {
+            component: {
+                name: 'Settings',
+                options: {
+                    topBar: {
+                        title: {
+                            text: 'Settings',
+                        }
+                    }
+                },
+                passProps: {
+                    key: element.key,
+                    element: element
+                  }
+            }
+        }).catch(e => console.log(e))
+    }
+
     render() {
 
         return (
@@ -125,7 +144,7 @@ class SettingsContainer extends NavigationComponent<Props> {
                 {this.props.element.children.length > 0 ? this.props.element.children.map(e => {
                     return (
                         <AncestorContainer key={e.key}>
-                            <AncestorDataContainer>
+                            <AncestorDataContainer onPress={() => this.forwardToAncestor(e)}>
                                 <AncesstorParamRow>Name : {e.name}</AncesstorParamRow>
                                 <AncesstorParamRow>Last name : {e.lastName}</AncesstorParamRow>
                                 <AncesstorParamRow>Birth date : {e.bDate}</AncesstorParamRow>
@@ -222,7 +241,7 @@ const AncestorContainer = styled.View`
     box-shadow: 0px 3px 3px rgba(0,0,0,0.5);
 `;
 
-const AncestorDataContainer = styled.View`
+const AncestorDataContainer = styled.TouchableOpacity`
     flex: 4;
 `;
 

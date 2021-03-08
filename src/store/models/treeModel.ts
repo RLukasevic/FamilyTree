@@ -7,6 +7,8 @@ export type familyTreeDataStateType = {
     error: null | string,
 }
 
+const localIP:string = '192.168.0.104';
+
 export const familyTreeData = createModel<RootModel>()({
     state: {
         data: [],
@@ -73,7 +75,7 @@ export const familyTreeData = createModel<RootModel>()({
     },
     effects: (dispatch) => ({
         async initDataAsync() {
-            await fetch('http://192.168.0.104:5555/api/init').then(res => res.json()).then(res => {
+            await fetch('http://' + localIP + ':5555/api/init').then(res => res.json()).then(res => {
                 dispatch.familyTreeData.initData(res)
             }).catch(e => {
                 dispatch.familyTreeData.initError()
